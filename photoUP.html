@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhotoUP Gallery</title>
+  <link rel="stylesheet" href="PhotoUP.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>PhotoUP</h1>
+      <p id="noticeText">Loading notice…</p>
+    </div>
+    <div class="topbar-buttons">
+      <a href="index.html" class="button secondary">Home</a>
+      <a href="admin-login.html" class="button secondary">Admin Login</a>
+    </div>
+  </header>
+
+  <main class="page-body">
+    <section class="search-panel">
+      <input id="searchInput" type="search" placeholder="Search by image name, e.g. Cat.jpg or Beach.png" />
+      <div id="resultsInfo" class="results-info"></div>
+    </section>
+
+    <section class="upload-panel">
+      <h2>Upload a Photo</h2>
+      <p>Add a new photo to the gallery without signing in. Enter the image name and URL, then click Add Photo.</p>
+      <div class="upload-form">
+        <input id="uploadName" type="text" placeholder="Cat.jpg" />
+        <input id="uploadUrl" type="url" placeholder="https://example.com/photo.jpg" />
+        <input id="uploadFile" type="file" accept="image/*" />
+        <button id="uploadButton" class="button">Add Photo</button>
+      </div>
+      <p id="uploadStatus" class="status-message"></p>
+    </section>
+
+    <section id="gallery" class="gallery"></section>
+  </main>
+
+  <div id="photoModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button id="closeModal" class="close-button" aria-label="Close">×</button>
+      <img id="modalImage" alt="Expanded photo" />
+      <p id="modalCaption"></p>
+      <a id="downloadButton" class="download-button" download>Download Photo</a>
+    </div>
+  </div>
+
+  <script src="photoUP.js"></script>
+</body>
+</html>

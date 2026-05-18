@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | PhotoUP</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div class="admin-page">
+    <div class="admin-card" id="adminPanel">
+      <h1>PhotoUP Admin</h1>
+      <p>Publish a notice and add new gallery photos without needing a server account.</p>
+
+      <section class="admin-section">
+        <h2>Notice</h2>
+        <textarea id="noticeTextarea" rows="4" placeholder="Enter a notice for the front page."></textarea>
+        <button id="saveNoticeButton" class="button">Save Notice</button>
+      </section>
+
+      <section class="admin-section">
+        <h2>Add New Photo</h2>
+        <label for="photoName">Photo Name</label>
+        <input id="photoName" type="text" placeholder="Cat.jpg" />
+        <label for="photoUrl">Image URL</label>
+        <input id="photoUrl" type="url" placeholder="https://example.com/photo.jpg" />
+        <button id="addPhotoButton" class="button">Save Photo</button>
+      </section>
+
+      <section class="admin-section">
+        <h2>Gallery Photos</h2>
+        <ul id="photoList" class="admin-photo-list"></ul>
+      </section>
+
+      <div class="admin-actions">
+        <button id="goToGalleryButton" class="button secondary">Open Gallery</button>
+        <button id="logoutButton" class="button danger">Sign Out</button>
+      </div>
+
+      <p id="adminStatus" class="status-message"></p>
+    </div>
+  </div>
+  <script src="admin.js"></script>
+</body>
+</html>
