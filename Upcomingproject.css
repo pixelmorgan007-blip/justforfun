@@ -1,157 +1,233 @@
+/* --- iOS 26 Design System Tokens --- */
+:root {
+    --ios-bg: #000000;
+    --card-bg: rgba(255, 255, 255, 0.04);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.6);
+    --accent-blue: #2f80ed;
+    --accent-glow: rgba(47, 128, 237, 0.4);
+    --glass-blur: 30px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #0c0c0c, #1a1a2e, #16213e);
-    background-attachment: fixed;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--ios-bg);
+    color: var(--text-primary);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    color: #fff;
     overflow-x: hidden;
+    position: relative;
+    padding: 20px;
 }
 
+/* --- Liquid Background Blobs --- */
+.liquid-blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+    opacity: 0.45;
+    mix-blend-mode: screen;
+    animation: float 12s infinite alternate ease-in-out;
+}
+
+.blob-1 {
+    width: 45vw;
+    height: 45vw;
+    background: radial-gradient(circle, #2f80ed 0%, rgba(0,0,0,0) 70%);
+    top: -10%;
+    left: -10%;
+}
+
+.blob-2 {
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, #9b51e0 0%, rgba(0,0,0,0) 70%);
+    bottom: -15%;
+    right: -10%;
+    animation-delay: -4s;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(4vw, 5vh) scale(1.1); }
+}
+
+/* --- Container (The iOS Glass Panel) --- */
 .container {
-    text-align: center;
-    max-width: 700px;
-    padding: 30px;
+    background: var(--card-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--card-border);
+    border-radius: 30px;
+    padding: clamp(25px, 5vw, 50px);
     width: 100%;
-    box-sizing: border-box;
+    max-width: 650px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: panelAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+@keyframes panelAppear {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* --- Typography --- */
 h1 {
-    font-size: 2.8em;
-    color: #00ffff;
-    margin-bottom: 20px;
-    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    background: linear-gradient(180deg, #ffffff 0%, #a1a1a1 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 35px;
+    text-align: center;
 }
 
+/* --- Liquid List Styling --- */
 ol {
-    text-align: left;
-    margin: 0 auto 30px;
-    max-width: 600px;
-    padding-left: 20px;
+    list-style: none;
+    margin-bottom: 30px;
 }
 
 li {
-    margin-bottom: 15px;
-    font-size: 18px;
-    line-height: 1.6;
-    color: #f5f5ff;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 18px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    transition: background 0.3s, transform 0.3s;
 }
 
-p {
-    font-size: 18px;
-    line-height: 1.7;
-    margin-bottom: 30px;
-    color: #f7f7ff;
+li:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+}
+
+.list-num {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    background: rgba(47, 128, 237, 0.1);
+    padding: 4px 8px;
+    border-radius: 8px;
+    margin-top: 2px;
+}
+
+.list-content strong {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+}
+
+.list-content p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* --- Priority Footer Text --- */
+.priority-note {
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 35px;
+}
+
+.priority-note strong {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+/* --- iOS Fluid Buttons --- */
+.button-group {
+    display: flex;
+    gap: 15px;
+    width: 100%;
 }
 
 .btn {
-    display: inline-block;
-    padding: 15px 25px;
-    background: transparent;
-    color: #ff00ff;
+    flex: 1;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 24px;
+    font-size: 1rem;
+    font-weight: 600;
     text-decoration: none;
-    border: 2px solid #ff00ff;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+    border-radius: 16px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
 }
 
-.btn:hover {
-    background: #ff00ff;
-    color: #000;
-    box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 60px #ff00ff;
-    transform: scale(1.05);
+.btn-primary {
+    background: var(--text-primary);
+    color: var(--ios-bg);
 }
 
-.back-btn {
-    border-color: #00ffff;
-    color: #00ffff;
-    box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+.btn-primary:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
 }
 
-.back-btn:hover {
-    background: #00ffff;
-    color: #000;
-    box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff;
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-    .container {
-        padding: 20px;
-        max-width: 90%;
-    }
-
-    h1 {
-        font-size: 2.2em;
-        margin-bottom: 15px;
-    }
-
-    ol {
-        padding-left: 15px;
-        max-width: 100%;
-    }
-
-    li {
-        font-size: 16px;
-        margin-bottom: 12px;
-        line-height: 1.5;
-    }
-
-    p {
-        font-size: 16px;
-        margin-bottom: 25px;
-    }
-
-    .btn {
-        padding: 12px 20px;
-        font-size: 15px;
-    }
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
 }
 
-@media (max-width: 480px) {
+/* --- Cross-Platform Compatibility Adjustments --- */
+@media (max-width: 500px) {
     body {
-        padding: 10px;
+        padding: 12px;
     }
-
+    
     .container {
-        padding: 15px;
-        max-width: 95%;
+        border-radius: 24px;
     }
 
-    h1 {
-        font-size: 1.8em;
-        margin-bottom: 12px;
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
     }
-
-    ol {
-        padding-left: 10px;
-        max-width: 100%;
-    }
-
-    li {
-        font-size: 14px;
-        margin-bottom: 10px;
-        line-height: 1.4;
-    }
-
-    p {
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-
+    
     .btn {
-        padding: 10px 16px;
-        font-size: 14px;
-        display: block;
         width: 100%;
-        max-width: 250px;
-        margin: 10px auto;
+        padding: 14px;
+    }
+}
+
+/* Safe areas for modern mobile screen notches/home indicators */
+@supports (padding: env(safe-area-inset-top)) {
+    body {
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
     }
 }
