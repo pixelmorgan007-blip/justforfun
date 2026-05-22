@@ -2,11 +2,11 @@ const photoStorageKey = 'photoUPGallery';
 const noticeStorageKey = 'photoUPNotice';
 
 const defaultPhotos = [
-  { name: 'Cat.jpg', url: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=900&q=80' },
-  { name: 'Beach.png', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80' },
-  { name: 'Sunset.jpg', url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80' },
-  { name: 'Mountain.png', url: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80' },
-  { name: 'Flower.jpg', url: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80' }
+  { name: 'Cyber Neon.jpg', url: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=900&q=80', isVideo: false },
+  { name: 'Ocean Stream.mp4', url: 'https://assets.mixkit.co/videos/preview/mixkit-waves-breaking-in-the-ocean-1527-large.mp4', isVideo: true },
+  { name: 'Sunset Dream.jpg', url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80', isVideo: false },
+  { name: 'Mountain Flight.mp4', url: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-thick-snow-covered-forest-42200-large.mp4', isVideo: true },
+  { name: 'Botanical Liquid.jpg', url: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80', isVideo: false }
 ];
 
 function getStoredPhotos() {
@@ -15,13 +15,13 @@ function getStoredPhotos() {
   try {
     const parsed = JSON.parse(stored);
     return Array.isArray(parsed) ? parsed : defaultPhotos.slice();
-  } catch (error) {
+  } catch {
     return defaultPhotos.slice();
   }
 }
 
 function getStoredNotice() {
-  return localStorage.getItem(noticeStorageKey) || 'Welcome to PhotoUP. Search by image name like Cat.jpg or Beach.png.';
+  return localStorage.getItem(noticeStorageKey) || 'iOS 26 Liquid Core Active. Streaming Engine Online.';
 }
 
 function savePhotos(photos) {
@@ -32,94 +32,112 @@ function loadNotice() {
   document.getElementById('noticeText').textContent = getStoredNotice();
 }
 
+function checkIsVideo(name, url) {
+  const target = (name + ' ' + url).toLowerCase();
+  return target.includes('.mp4') || target.includes('.webm') || target.includes('.mov') || url.startsWith('data:video/');
+}
+
 function displayGallery(filteredPhotos) {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '';
 
   if (!filteredPhotos.length) {
-    gallery.innerHTML = '<p class="empty-state">No images match that search. Try "Cat.jpg" or "Beach.png".</p>';
+    gallery.innerHTML = `
+      <div class="empty-state-card">
+        <p>No matches discovered within active partitions.</p>
+      </div>
+    `;
     return;
   }
 
-  filteredPhotos.forEach((photo) => {
-    const card = document.createElement('button');
-    card.type = 'button';
-    card.className = 'photo-card';
+  filteredPhotos.forEach((item) => {
+    const card = document.createElement('div');
+    card.className = `masonry-item ${item.isVideo ? 'video-type' : 'photo-type'}`;
+    
+    // Dynamic media parsing based on element flags
+    const mediaTag = item.isVideo 
+      ? `<video src="${item.url}" muted loop playsinline preload="metadata"></video><span class="media-badge">VIDEO</span>`
+      : `<img src="${item.url}" alt="${item.name}" loading="lazy" />`;
+
     card.innerHTML = `
-      <img src="${photo.url}" alt="${photo.name}" loading="lazy" />
-      <div class="photo-name">${photo.name}</div>
+      <div class="media-wrapper">${mediaTag}</div>
+      <div class="item-meta">
+        <span class="item-title">${item.name}</span>
+      </div>
     `;
-    card.addEventListener('click', () => openModal(photo));
+    
+    // Mouse hover preview configurations for videos on desktop
+    const videoElement = card.querySelector('video');
+    if (videoElement) {
+      card.addEventListener('mouseenter', () => videoElement.play().catch(()=>{}));
+      card.addEventListener('mouseleave', () => {
+        videoElement.pause();
+        videoElement.currentTime = 0;
+      });
+    }
+
+    card.addEventListener('click', () => openModal(item));
     gallery.appendChild(card);
   });
 }
 
-function openModal(photo) {
+function openModal(item) {
   const modal = document.getElementById('photoModal');
-  const modalImage = document.getElementById('modalImage');
+  const viewport = document.getElementById('modalViewport');
   const modalCaption = document.getElementById('modalCaption');
   const downloadButton = document.getElementById('downloadButton');
 
-  modalImage.src = photo.url;
-  modalImage.alt = photo.name;
-  modalCaption.textContent = photo.name;
-  downloadButton.href = photo.url;
-  downloadButton.download = photo.name;
+  // Inject structural viewport context elements 
+  if (item.isVideo) {
+    viewport.innerHTML = `<video src="${item.url}" controls autoplay loop playsinline class="modal-media-target"></video>`;
+  } else {
+    viewport.innerHTML = `<img src="${item.url}" alt="${item.name}" class="modal-media-target" />`;
+  }
+
+  modalCaption.textContent = item.name;
+  downloadButton.href = item.url;
+  downloadButton.download = item.name;
+  
   modal.classList.add('visible');
   modal.setAttribute('aria-hidden', 'false');
 }
 
 function closeModal() {
   const modal = document.getElementById('photoModal');
+  const viewport = document.getElementById('modalViewport');
+  viewport.innerHTML = ''; // Kill media buffering loops immediately
   modal.classList.remove('visible');
   modal.setAttribute('aria-hidden', 'true');
 }
 
 function updateResultsText(count, query) {
   const info = document.getElementById('resultsInfo');
-  if (!query) {
-    info.textContent = `${count} photos available.`;
-    return;
-  }
-  info.textContent = `${count} result(s) for "${query}".`;
+  info.textContent = query ? `${count} variants isolated for "${query}"` : `${count} active cloud entities distributed.`;
 }
 
 function filterPhotos(query) {
   const normalized = query.trim().toLowerCase();
-  if (!normalized) {
-    return getStoredPhotos();
-  }
-  return getStoredPhotos().filter((photo) => photo.name.toLowerCase().includes(normalized));
+  if (!normalized) return getStoredPhotos();
+  return getStoredPhotos().filter(p => p.name.toLowerCase().includes(normalized));
 }
 
 function setUploadStatus(message, type = 'info') {
   const uploadStatus = document.getElementById('uploadStatus');
   uploadStatus.textContent = message;
-  uploadStatus.style.color = type === 'error' ? '#dc2626' : type === 'success' ? '#10b981' : '#38bdf8';
-}
-
-function getStorageSizeInfo() {
-  try {
-    const stored = localStorage.getItem(photoStorageKey);
-    const sizeInBytes = stored ? new Blob([stored]).size : 0;
-    const sizeInMB = (sizeInBytes / (1024 * 1024)).toFixed(2);
-    return { sizeInBytes, sizeInMB, maxMB: 5 };
-  } catch {
-    return { sizeInBytes: 0, sizeInMB: 0, maxMB: 5 };
-  }
+  uploadStatus.className = `runtime-status color-${type}`;
 }
 
 function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.onerror = () => reject(new Error('File reading stream broken'));
     reader.readAsDataURL(file);
   });
 }
 
 function refreshGallery(query) {
-  const searchQuery = query || document.getElementById('searchInput').value;
+  const searchQuery = typeof query === 'string' ? query : document.getElementById('searchInput').value;
   const results = filterPhotos(searchQuery);
   displayGallery(results);
   updateResultsText(results.length, searchQuery);
@@ -135,8 +153,13 @@ async function initGallery() {
 
   refreshGallery('');
 
-  searchInput.addEventListener('input', () => {
-    refreshGallery(searchInput.value);
+  searchInput.addEventListener('input', () => refreshGallery(searchInput.value));
+
+  // Dynamic monitoring context label for local uploads
+  uploadFile.addEventListener('change', () => {
+    if (uploadFile.files[0]) {
+      document.querySelector('.custom-file-label').innerHTML = `✓ ${uploadFile.files[0].name}`;
+    }
   });
 
   uploadButton.addEventListener('click', async () => {
@@ -145,52 +168,56 @@ async function initGallery() {
     const file = uploadFile.files[0];
 
     if (!name) {
-      setUploadStatus('Please enter a photo name.', 'error');
+      setUploadStatus('Process terminated: Assign asset signature name.', 'error');
       return;
     }
 
     if (!file && !url) {
-      setUploadStatus('Please provide an image URL or choose a local file.', 'error');
+      setUploadStatus('Data source trace empty: Bind file stream or enter URL endpoint.', 'error');
       return;
     }
 
-    let photoUrl = url;
+    let resolvedUrl = url;
+    let computedVideoFlag = checkIsVideo(name, url);
+
     if (file) {
-      if (!file.type.startsWith('image/')) {
-        setUploadStatus('Only image files are allowed.', 'error');
-        return;
-      }
+      computedVideoFlag = file.type.startsWith('video/');
       try {
-        photoUrl = await readFileAsDataUrl(file);
-      } catch (error) {
-        setUploadStatus('Could not read the selected image.', 'error');
+        setUploadStatus('Encoding file stream blocks...', 'info');
+        resolvedUrl = await readFileAsDataUrl(file);
+      } catch {
+        setUploadStatus('System crash: Stream translation failure.', 'error');
         return;
       }
     }
 
     const photos = getStoredPhotos();
-    photos.unshift({ name, url: photoUrl });
+    photos.unshift({ name, url: resolvedUrl, isVideo: computedVideoFlag });
+    
     try {
       savePhotos(photos);
-      const { sizeInMB } = getStorageSizeInfo();
-      setUploadStatus(`✓ Photo saved permanently! (${sizeInMB}MB used)`, 'success');
+      setUploadStatus('✓ Asset integrated cleanly into structural array.', 'success');
     } catch (error) {
       if (error.name === 'QuotaExceededError') {
-        setUploadStatus('Storage full. Try removing photos or using image URLs instead of local files.', 'error');
+        setUploadStatus('Domain write failed: Local browser sandboxed storage array full.', 'error');
         return;
       }
-      setUploadStatus('Could not save photo. Please try again.', 'error');
+      setUploadStatus('Write failure: Matrix collision.', 'error');
       return;
     }
+
     refreshGallery(searchInput.value);
+    
+    // Clear elements smoothly
     uploadName.value = '';
     uploadUrl.value = '';
     uploadFile.value = '';
+    document.querySelector('.custom-file-label').innerHTML = `<span class="upload-icon">✦</span> Choose Local Media`;
   });
 
   document.getElementById('closeModal').addEventListener('click', closeModal);
-  document.getElementById('photoModal').addEventListener('click', (event) => {
-    if (event.target.id === 'photoModal') closeModal();
+  document.getElementById('photoModal').addEventListener('click', (e) => {
+    if (e.target.id === 'photoModal') closeModal();
   });
 }
 
