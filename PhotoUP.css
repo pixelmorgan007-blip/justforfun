@@ -1,472 +1,493 @@
+/* --- iOS 26 Design Core System Variables --- */
+:root {
+  --ios-dark: #020205;
+  --panel-glass: rgba(10, 10, 18, 0.45);
+  --border-glass: rgba(255, 255, 255, 0.07);
+  --text-bright: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.55);
+  --ios-blue: #007aff;
+  --ios-green: #34c759;
+  --ios-red: #ff3b30;
+  --blur-radius: 35px;
+}
+
+/* --- Foundation System Fixes --- */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+  background-color: var(--ios-dark);
+  color: var(--text-bright);
   min-height: 100vh;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #e2e8f0;
-  background: radial-gradient(circle at 20% 10%, rgba(96, 165, 250, 0.18) 0%, transparent 22%), radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 18%), radial-gradient(circle at 50% 40%, rgba(59, 130, 246, 0.12) 0%, transparent 20%), #050816;
-  background-attachment: fixed;
+  position: relative;
+  overflow-x: hidden;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* --- Floating Liquid Mesh Animations --- */
+.liquid-mesh {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: -1;
+  opacity: 0.35;
+  mix-blend-mode: screen;
+  animation: liquidMotion 20s infinite alternate ease-in-out;
 }
 
-button,
-input,
-textarea {
-  font: inherit;
+.mesh-alpha {
+  width: 70vw;
+  height: 70vw;
+  background: radial-gradient(circle, rgba(0,122,255,0.4) 0%, transparent 70%);
+  top: -20%;
+  left: -10%;
 }
 
-.topbar {
+.mesh-beta {
+  width: 80vw;
+  height: 80vw;
+  background: radial-gradient(circle, rgba(142,68,173,0.3) 0%, transparent 70%);
+  bottom: -25%;
+  right: -10%;
+  animation-delay: -7s;
+}
+
+@keyframes liquidMotion {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  100% { transform: translate(5vw, -8vh) scale(1.15) rotate(90deg); }
+}
+
+/* --- iOS 26 Liquid Frosted Header Block --- */
+.topbar-glass {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem;
-  background: rgba(10, 15, 31, 0.9);
-  color: #f8fafc;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
-  backdrop-filter: blur(10px);
-}
-
-.topbar > div:first-child {
-  width: 100%;
-}
-
-.topbar h1 {
-  margin: 0 0 0.25rem;
-  font-size: 1.5rem;
-}
-
-.topbar p {
-  margin: 0;
-  max-width: 100%;
-  color: #cbd5e1;
-  font-size: 0.85rem;
-}
-
-.topbar-buttons {
-  display: flex;
-  gap: 0.5rem;
+  justify-content: space-between;
   align-items: center;
-  width: 100%;
-  flex-wrap: wrap;
+  padding: 16px 24px;
+  background: var(--panel-glass);
+  backdrop-filter: blur(var(--blur-radius));
+  -webkit-backdrop-filter: blur(var(--blur-radius));
+  border-bottom: 1px solid var(--border-glass);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 
-@media (min-width: 768px) {
-  .topbar {
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 1.5rem;
-    gap: 1rem;
-  }
-
-  .topbar > div:first-child {
-    width: auto;
-  }
-
-  .topbar h1 {
-    font-size: clamp(1.6rem, 2vw, 2.2rem);
-  }
-
-  .topbar p {
-    font-size: 1rem;
-    max-width: 38rem;
-  }
-
-  .topbar-buttons {
-    gap: 0.75rem;
-    width: auto;
-  }
+.topbar-brand h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(180deg, #fff 0%, #aaa 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.page-body {
-  width: min(1120px, calc(100% - 2rem));
-  margin: 2rem auto 3rem;
+.topbar-brand p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2px;
 }
 
-.search-panel {
+.topbar-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* --- Structural Fluid Grid Core Layout --- */
+.ios-fluid-body {
+  width: min(1400px, 100% - 32px);
+  margin: 24px auto 60px;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: 24px;
 }
 
-.search-panel input {
+/* --- Floating Input Panels --- */
+.search-glass-panel, .publisher-panel {
+  background: var(--panel-glass);
+  backdrop-filter: blur(var(--blur-radius));
+  -webkit-backdrop-filter: blur(var(--blur-radius));
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.05);
+}
+
+.input-wrapper {
+  position: relative;
   width: 100%;
-  padding: 0.95rem 1.1rem;
-  border: 1px solid rgba(148, 163, 184, 0.24);
-  border-radius: 14px;
-  background: rgba(15, 23, 42, 0.95);
-  color: #e2e8f0;
+}
+
+.search-glass-panel input {
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  color: var(--text-bright);
+  font-size: 1rem;
   outline: none;
-  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.08);
-  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (min-width: 640px) {
-  .search-panel {
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .search-panel input {
-    flex: 1;
-    min-width: 220px;
-  }
+.search-glass-panel input:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--ios-blue);
+  box-shadow: 0 0 15px rgba(0, 122, 255, 0.25);
 }
 
-.upload-panel {
-  margin-bottom: 1.8rem;
-  padding: 1.75rem;
-  border-radius: 28px;
-  background: rgba(8, 13, 28, 0.92);
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+.results-indicator {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 10px;
 }
 
-.upload-panel h2 {
-  margin: 0 0 0.5rem;
-  color: #f8fafc;
+/* --- Publisher Layout Form Matrices --- */
+.panel-header h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 4px;
 }
 
-.upload-panel p {
-  margin: 0 0 1rem;
-  color: #94a3b8;
+.panel-header p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
 }
 
-.upload-form {
+.publisher-grid {
   display: grid;
-  gap: 0.9rem;
   grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: flex-end;
 }
 
-.upload-form input,
-.upload-form input[type='file'] {
-  width: 100%;
-  border: 1px solid rgba(148, 163, 184, 0.16);
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-group label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.input-group input[type="text"],
+.input-group input[type="url"] {
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 14px;
-  padding: 0.95rem 1rem;
-  background: rgba(15, 23, 42, 0.95);
-  color: #e2e8f0;
-  font-size: 1rem;
+  color: var(--text-bright);
+  font-size: 0.95rem;
+  outline: none;
 }
 
-.upload-form button {
-  white-space: nowrap;
-  align-self: stretch;
-  padding: 1rem;
+/* Hidden File Element Logic styled into Liquid button format */
+.input-group input[type="file"] {
+  display: none;
+}
+
+.custom-file-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.custom-file-label:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--text-bright);
+}
+
+/* Desktop Expansion for Publishers */
+@media (min-width: 850px) {
+  .publisher-grid {
+    grid-template-columns: 1fr 1fr 1fr auto;
+  }
+}
+
+/* --- Pinterest Style Fluid Masonry Grid Layout --- */
+.fluid-masonry {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
 }
 
 @media (min-width: 768px) {
-  .upload-form {
-    grid-template-columns: minmax(140px, 1fr) minmax(180px, 1fr) minmax(180px, 1fr) auto;
-  }
-}
-
-.photo-card {
-  display: block;
-  width: 100%;
-  border: 1px solid rgba(148, 163, 184, 0.15);
-  padding: 0;
-  text-align: left;
-  border-radius: 24px;
-  overflow: hidden;
-  background: rgba(12, 18, 35, 0.92);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.32);
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.photo-card:hover,
-.photo-card:focus-visible {
-  transform: translateY(-3px);
-  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.44);
-}
-
-.photo-card img {
-  width: 100%;
-  display: block;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-}
-
-.photo-name {
-  padding: 0.95rem 1rem 1.1rem;
-  font-weight: 600;
-  color: #f8fafc;
-}
-
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 0.9rem;
-}
-
-@media (min-width: 640px) {
-  .gallery {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .gallery {
+  .fluid-masonry {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1.2rem;
+    gap: 20px;
   }
 }
 
-.modal {
+/* Dynamic Cards with Micro Spring Actions */
+.masonry-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+}
+
+.masonry-item:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 1px 1px rgba(255,255,255,0.15);
+}
+
+.media-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: #000;
+  overflow: hidden;
+}
+
+/* Pinterest Style Element height variability mapping logic trick */
+.masonry-item.video-type .media-wrapper {
+  aspect-ratio: 16 / 9;
+}
+
+.media-wrapper img, .media-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.media-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+}
+
+.item-meta {
+  padding: 14px 16px;
+}
+
+.item-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-bright);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+}
+
+/* --- Universal Liquid Buttons Engine --- */
+.ios-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ios-btn.primary {
+  background: var(--text-bright);
+  color: var(--ios-dark);
+}
+
+.ios-btn.primary:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.ios-btn.secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-bright);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.ios-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.publish-trigger {
+  padding: 14px 28px;
+  height: 48px;
+}
+
+/* --- Media Cinema Interactive Overlays --- */
+.cinema-overlay {
   position: fixed;
   inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   display: grid;
   place-items: center;
-  background: rgba(15, 23, 42, 0.7);
+  padding: 16px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s ease;
 }
 
-.modal.visible {
+.cinema-overlay.visible {
   opacity: 1;
   pointer-events: auto;
 }
 
-.modal-content {
-  width: min(92vw, 820px);
-  max-height: 92vh;
-  overflow: auto;
-  background: rgba(8, 12, 23, 0.98);
-  border-radius: 20px;
-  padding: 1rem;
+.cinema-card {
+  background: rgba(20, 20, 30, 0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 28px;
+  width: min(960px, 100%);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   position: relative;
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.8);
 }
 
-@media (min-width: 640px) {
-  .modal-content {
-    border-radius: 24px;
-    padding: 1.25rem;
-  }
-}
-
-.close-button {
+.dismiss-trigger {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  border: none;
-  width: 2.5rem;
-  height: 2.5rem;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.95);
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255,255,255,0.1);
   color: #fff;
   cursor: pointer;
-  font-size: 1.3rem;
-}
-
-.modal-content img {
-  width: 100%;
-  border-radius: 18px;
-  display: block;
-  margin-bottom: 1rem;
-}
-
-.modal-content p {
-  margin: 0 0 1rem;
-  font-weight: 700;
-  color: #f8fafc;
-}
-
-.download-button,
-.button,
-.link-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.9rem 1.3rem;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
-  text-decoration: none;
-}
-
-.download-button,
-.button {
-  background: linear-gradient(135deg, #4f46e5, #2563eb);
-  color: #fff;
-  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.28);
-}
-
-.download-button:hover,
-.button:hover,
-.link-button:hover {
-  transform: translateY(-1px);
-}
-
-.button.secondary,
-.link-button {
-  background: rgba(255, 255, 255, 0.06);
-  color: #e2e8f0;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-}
-
-.button.danger {
-  background: #dc2626;
-  color: #fff;
-}
-
-@media (max-width: 480px) {
-  .upload-panel {
-    margin-bottom: 1.5rem;
-    padding: 1.25rem;
-    border-radius: 20px;
-  }
-
-  .button,
-  .download-button {
-    padding: 0.85rem 1.2rem;
-    font-size: 0.95rem;
-  }
-
-  .modal-content {
-    width: 95vw;
-  }
-}
-
-.admin-page {
-  min-height: 100vh;
+  font-size: 1rem;
   display: grid;
   place-items: center;
-  padding: 2rem;
-  background: radial-gradient(circle at 10% 10%, rgba(168, 85, 247, 0.12) 0%, transparent 20%), #050816;
+  z-index: 10;
+  transition: background 0.2s;
 }
 
-.admin-card {
-  width: min(760px, 100%);
-  background: rgba(8, 12, 23, 0.96);
-  border-radius: 28px;
-  padding: 2rem;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.32);
-  border: 1px solid rgba(148, 163, 184, 0.14);
+.dismiss-trigger:hover {
+  background: #ff3b30;
 }
 
-.admin-card h1,
-.admin-card h2 {
-  margin-top: 0;
-}
-
-.admin-form,
-.admin-section {
-  display: grid;
-  gap: 0.9rem;
-}
-
-.admin-form input,
-.admin-section input,
-.admin-section textarea {
+.cinema-viewport {
   width: 100%;
-  border: 1px solid #cbd5e1;
-  border-radius: 14px;
-  padding: 0.95rem 1rem;
-  background: #fff;
-  color: #111827;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-textarea {
-  resize: vertical;
-  min-height: 120px;
+.modal-media-target {
+  max-width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+  display: block;
 }
 
-.admin-photo-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 0.9rem;
-}
-
-.admin-photo-item {
+.cinema-meta {
+  padding: 24px;
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
   align-items: center;
-  padding: 1rem 1.1rem;
-  border-radius: 18px;
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
+  gap: 16px;
+  background: rgba(10, 10, 15, 0.8);
+  border-top: 1px solid var(--border-glass);
 }
 
-.admin-photo-item span {
+#modalCaption {
+  font-size: 1.2rem;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.admin-photo-item a,
-.admin-photo-item button {
-  margin-left: 0.75rem;
+/* --- Interface Feedback Engine --- */
+.runtime-status {
+  font-size: 0.88rem;
+  margin-top: 12px;
+  font-weight: 500;
 }
+.runtime-status.color-error { color: var(--ios-red); }
+.runtime-status.color-success { color: var(--ios-green); }
+.runtime-status.color-info { color: var(--ios-blue); }
 
-.admin-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  margin-top: 1rem;
-}
-
-.status-message {
-  margin: 0.75rem 0 0;
-  color: #2563eb;
-}
-
-.small-note {
-  margin: 0.5rem 0 0;
-  color: #475569;
-}
-
-.empty-state {
-  padding: 2rem;
+.empty-state-card {
+  grid-column: 1 / -1;
   text-align: center;
-  color: #64748b;
-  background: #f8fafc;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  border: 1px dashed var(--border-glass);
   border-radius: 20px;
 }
 
-.page-body {
-  width: min(1120px, calc(100% - 2rem));
-  margin: 1rem auto 2rem;
-}
-
-@media (min-width: 640px) {
-  .page-body {
-    margin: 2rem auto 3rem;
+/* --- Mobile Native Safari / Chrome Viewport Customizations --- */
+@media (max-width: 600px) {
+  .topbar-glass {
+    padding: 12px 16px;
   }
-}
-
-@media (max-width: 480px) {
-  .upload-panel {
-    margin-bottom: 1.5rem;
-    padding: 1.25rem;
+  .topbar-brand h1 { font-size: 1.3rem; }
+  
+  .ios-fluid-body {
+    width: 100%;
+    padding: 0 12px;
+    margin: 16px auto 40px;
+    gap: 16px;
+  }
+  
+  .search-glass-panel, .publisher-panel {
+    padding: 16px;
     border-radius: 20px;
   }
 
-  .modal-content {
+  .cinema-card {
     border-radius: 20px;
-    padding: 1rem;
   }
 
-  .button,
-  .download-button {
-    padding: 0.85rem 1.2rem;
-    font-size: 0.95rem;
+  .cinema-meta {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+  
+  .download-trigger {
+    width: 100%;
+  }
+}
+
+/* Automatic notch/home indicator alignment map */
+@supports (padding: env(safe-area-inset-top)) {
+  .topbar-glass {
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-left: max(24px, env(safe-area-inset-left));
+    padding-right: max(24px, env(safe-area-inset-right));
   }
 }
