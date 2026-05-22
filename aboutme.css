@@ -1,108 +1,274 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #0c0c0c, #1a1a2e, #16213e);
-    background-attachment: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    color: #fff;
-    overflow-x: hidden;
-}
+/* ===== iOS 26 Liquid Glass Style ===== */
 
-.container {
-    text-align: center;
-    max-width: 600px;
-    padding: 20px;
-    width: 100%;
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-p {
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 20px;
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+        "Segoe UI", sans-serif;
+
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow-x: hidden;
+
+    background:
+        radial-gradient(circle at top left, #7aa2ff 0%, transparent 30%),
+        radial-gradient(circle at bottom right, #ff7ad9 0%, transparent 30%),
+        linear-gradient(135deg, #0b1020, #12192d, #0f172a);
+
+    color: white;
+    padding: 20px;
 }
 
-.btn {
+/* ===== Main Glass Card ===== */
+
+.hero-card {
+    position: relative;
+
+    width: 100%;
+    max-width: 720px;
+
+    border-radius: 34px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.35),
+        inset 0 1px 1px rgba(255, 255, 255, 0.25);
+
+    overflow: hidden;
+}
+
+/* ===== Floating Liquid Orbs ===== */
+
+.liquid-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(10px);
+    opacity: 0.8;
+    animation: float 10s ease-in-out infinite;
+}
+
+.orb-1 {
+    width: 180px;
+    height: 180px;
+
+    background: linear-gradient(
+        135deg,
+        rgba(122, 162, 255, 0.9),
+        rgba(72, 110, 255, 0.2)
+    );
+
+    top: -60px;
+    right: -50px;
+}
+
+.orb-2 {
+    width: 140px;
+    height: 140px;
+
+    background: linear-gradient(
+        135deg,
+        rgba(255, 122, 217, 0.8),
+        rgba(255, 122, 217, 0.1)
+    );
+
+    bottom: -50px;
+    left: -40px;
+
+    animation-delay: 2s;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0px) translateX(0px);
+    }
+
+    50% {
+        transform: translateY(-18px) translateX(10px);
+    }
+}
+
+/* ===== Content ===== */
+
+.glass-content {
+    position: relative;
+    z-index: 2;
+
+    padding: 55px;
+    text-align: center;
+}
+
+.ios-badge {
     display: inline-block;
-    padding: 15px 20px;
-    background: transparent;
-    color: #ff00ff;
+
+    padding: 8px 16px;
+
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    backdrop-filter: blur(15px);
+
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+
+    margin-bottom: 24px;
+
+    color: rgba(255, 255, 255, 0.9);
+}
+
+h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -2px;
+
+    margin-bottom: 16px;
+
+    line-height: 1;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.72);
+
+    margin-bottom: 24px;
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.8;
+
+    color: rgba(255, 255, 255, 0.82);
+
+    margin-bottom: 18px;
+}
+
+/* ===== Buttons ===== */
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+
+    flex-wrap: wrap;
+
+    margin-top: 32px;
+}
+
+.liquid-btn {
+    position: relative;
+
+    padding: 14px 24px;
+
+    border-radius: 18px;
+
     text-decoration: none;
-    border: 2px solid #ff00ff;
-    border-radius: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
-    margin: 10px;
+
+    font-weight: 600;
+    font-size: 15px;
+
+    transition: all 0.35s ease;
+
+    overflow: hidden;
+
+    backdrop-filter: blur(20px);
 }
 
-.btn:hover {
-    background: #ff00ff;
-    color: #000;
-    box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 60px #ff00ff;
-    transform: scale(1.05);
+.primary {
+    background: rgba(255, 255, 255, 0.14);
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+
+    color: white;
+
+    box-shadow:
+        inset 0 1px 1px rgba(255, 255, 255, 0.25),
+        0 8px 30px rgba(122, 162, 255, 0.25);
 }
 
-.back-btn {
-    border-color: #00ffff;
-    color: #00ffff;
-    box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+.secondary {
+    background: rgba(255, 255, 255, 0.06);
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    color: rgba(255, 255, 255, 0.9);
 }
 
-.back-btn:hover {
-    background: #00ffff;
-    color: #000;
-    box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff;
+.liquid-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+
+    background: rgba(255, 255, 255, 0.18);
+
+    box-shadow:
+        0 10px 40px rgba(255, 255, 255, 0.12),
+        inset 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
-/* Mobile Responsiveness */
+/* ===== Mobile Responsive ===== */
+
 @media (max-width: 768px) {
-    .container {
-        padding: 15px;
-        max-width: 90%;
+    .glass-content {
+        padding: 38px 26px;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
     }
 
     p {
-        font-size: 16px;
-        margin-bottom: 15px;
+        font-size: 0.95rem;
     }
 
-    .btn {
-        padding: 12px 18px;
-        font-size: 16px;
-        margin: 8px;
+    .button-group {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .liquid-btn {
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
     }
 }
 
 @media (max-width: 480px) {
     body {
-        padding: 10px;
+        padding: 14px;
     }
 
-    .container {
-        padding: 12px;
-        max-width: 95%;
+    .hero-card {
+        border-radius: 28px;
+    }
+
+    .glass-content {
+        padding: 30px 20px;
+    }
+
+    h1 {
+        font-size: 2.4rem;
     }
 
     p {
-        font-size: 14px;
-        margin-bottom: 12px;
-        line-height: 1.5;
-    }
-
-    .btn {
-        padding: 10px 15px;
-        font-size: 14px;
-        margin: 6px;
-        display: block;
-        width: 100%;
-        max-width: 250px;
-        margin-left: auto;
-        margin-right: auto;
+        line-height: 1.7;
     }
 }
