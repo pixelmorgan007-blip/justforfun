@@ -2,49 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PhotoUP Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>PhotoUP — Discover & Stream</title>
   <link rel="stylesheet" href="PhotoUP.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div>
+  <div class="liquid-mesh mesh-alpha"></div>
+  <div class="liquid-mesh mesh-beta"></div>
+
+  <header class="topbar-glass">
+    <div class="topbar-brand">
       <h1>PhotoUP</h1>
-      <p id="noticeText">Loading notice…</p>
+      <p id="noticeText">Syncing cloud matrix...</p>
     </div>
-    <div class="topbar-buttons">
-      <a href="index.html" class="button secondary">Home</a>
-      <a href="admin-login.html" class="button secondary">Admin Login</a>
+    <div class="topbar-actions">
+      <a href="index.html" class="ios-btn secondary">Home</a>
+      <a href="admin-login.html" class="ios-btn secondary">Admin Portal</a>
     </div>
   </header>
 
-  <main class="page-body">
-    <section class="search-panel">
-      <input id="searchInput" type="search" placeholder="Search by image name, e.g. Cat.jpg or Beach.png" />
-      <div id="resultsInfo" class="results-info"></div>
-    </section>
-
-    <section class="upload-panel">
-      <h2>Upload a Photo</h2>
-      <p>Add a new photo to the gallery without signing in. Enter the image name and URL, then click Add Photo.</p>
-      <div class="upload-form">
-        <input id="uploadName" type="text" placeholder="Cat.jpg" />
-        <input id="uploadUrl" type="url" placeholder="https://example.com/photo.jpg" />
-        <input id="uploadFile" type="file" accept="image/*" />
-        <button id="uploadButton" class="button">Add Photo</button>
+  <main class="ios-fluid-body">
+    <section class="search-glass-panel">
+      <div class="input-wrapper">
+        <input id="searchInput" type="search" placeholder="Search creators, topics, files (e.g., Cat.jpg, Surf.mp4)..." />
+        <span class="search-glow"></span>
       </div>
-      <p id="uploadStatus" class="status-message"></p>
+      <div id="resultsInfo" class="results-indicator"></div>
     </section>
 
-    <section id="gallery" class="gallery"></section>
+    <section class="publisher-panel">
+      <div class="panel-header">
+        <h2>Publish Canvas</h2>
+        <p>Broadcast assets directly into the global storage array.</p>
+      </div>
+      
+      <div class="publisher-grid">
+        <div class="input-group">
+          <label for="uploadName">Asset Name</label>
+          <input id="uploadName" type="text" placeholder="Cinematic_Sequence.mp4" />
+        </div>
+        
+        <div class="input-group">
+          <label for="uploadUrl">Remote Media URL</label>
+          <input id="uploadUrl" type="url" placeholder="https://domain.com/source.jpg or .mp4" />
+        </div>
+
+        <div class="input-group file-group">
+          <label for="uploadFile" class="custom-file-label">
+            <span class="upload-icon">✦</span> Choose Local Media
+          </label>
+          <input id="uploadFile" type="file" accept="image/*,video/*" />
+        </div>
+
+        <button id="uploadButton" class="ios-btn primary publish-trigger">Publish Asset</button>
+      </div>
+      <p id="uploadStatus" class="runtime-status"></p>
+    </section>
+
+    <section id="gallery" class="fluid-masonry"></section>
   </main>
 
-  <div id="photoModal" class="modal" aria-hidden="true">
-    <div class="modal-content">
-      <button id="closeModal" class="close-button" aria-label="Close">×</button>
-      <img id="modalImage" alt="Expanded photo" />
-      <p id="modalCaption"></p>
-      <a id="downloadButton" class="download-button" download>Download Photo</a>
+  <div id="photoModal" class="cinema-overlay" aria-hidden="true">
+    <div class="cinema-card">
+      <button id="closeModal" class="dismiss-trigger" aria-label="Dismiss">✕</button>
+      
+      <div class="cinema-viewport" id="modalViewport">
+        </div>
+      
+      <div class="cinema-meta">
+        <h3 id="modalCaption">Asset Title</h3>
+        <a id="downloadButton" class="ios-btn primary download-trigger" download>Download Source</a>
+      </div>
     </div>
   </div>
 
