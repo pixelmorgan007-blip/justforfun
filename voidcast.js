@@ -674,7 +674,17 @@ const SEED_POSTS = [
     timestamp: new Date(Date.now() - 2 * 3600000).toISOString(),
     likes: 312, boosts: 201, comments: 44, likedByMe: false, boostedByMe: false
   },
+  {
+    id: 1000005,
+    username: 'anon_ppp',
+    text: 'Pratyush silwal is femboy😊. ✦',
+    type: 'text', mediaDataURL: null, mediaIsVideo: false,
+    timestamp: new Date(Date.now() - 5 * 360000).toISOString(),
+    likes: 300000, boosts: 2010, comments: 4400, likedByMe: false, boostedByMe: false
+  },
 ];
+
+
 
 if (State.posts.length === 0) {
   State.posts = SEED_POSTS;
