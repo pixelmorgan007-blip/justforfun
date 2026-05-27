@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoidCast — Speak Into the Dark</title>
+  <link rel="stylesheet" href="voidcast.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Star canvas background -->
+  <canvas id="starfield"></canvas>
+
+  <!-- Nebula overlay -->
+  <div class="nebula-overlay"></div>
+
+  <!-- USERNAME MODAL -->
+  <div id="username-modal" class="modal-overlay active">
+    <div class="modal-box">
+      <div class="modal-glow"></div>
+      <div class="modal-icon">👤</div>
+      <h2 class="modal-title">WHO ARE YOU IN THE VOID?</h2>
+      <p class="modal-subtitle">No account needed. Just pick a signal name.</p>
+      <div class="input-wrap">
+        <span class="input-prefix">@</span>
+        <input type="text" id="username-input" class="username-field" placeholder="anon_traveler_001" maxlength="24" autocomplete="off" />
+      </div>
+      <div id="username-error" class="username-error hidden">Pick a name (3–24 chars, no spaces)</div>
+      <button id="username-confirm" class="btn-primary">ENTER THE VOID</button>
+      <p class="modal-note">You can change your signal name anytime from the top bar.</p>
+    </div>
+  </div>
+
+  <!-- POST MODAL -->
+  <div id="post-modal" class="modal-overlay">
+    <div class="modal-box post-modal-box">
+      <div class="modal-glow"></div>
+      <button class="modal-close" id="close-post-modal">✕</button>
+      <h2 class="modal-title">BROADCAST TO THE VOID</h2>
+
+      <div class="post-type-tabs">
+        <button class="tab-btn active" data-tab="text">✍ TEXT</button>
+        <button class="tab-btn" data-tab="photo">📷 PHOTO</button>
+        <button class="tab-btn" data-tab="video">🎬 VIDEO</button>
+      </div>
+
+      <textarea id="post-text" class="post-textarea" placeholder="What's drifting through your mind..."></textarea>
+
+      <div id="media-upload-area" class="media-upload hidden">
+        <div class="upload-drop-zone" id="drop-zone">
+          <div class="drop-icon" id="drop-icon">⬆</div>
+          <p id="drop-label">Drop your file here or <label for="file-input" class="file-label">browse</label></p>
+          <input type="file" id="file-input" class="hidden-input" accept="image/*,video/*" />
+        </div>
+        <div id="media-preview" class="media-preview hidden"></div>
+      </div>
+
+      <div class="post-footer">
+        <span class="char-count"><span id="char-num">0</span>/500</span>
+        <button id="submit-post" class="btn-primary btn-small">BROADCAST</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-left">
+      <span class="logo-icon">✦</span>
+      <span class="logo-text">VOID<span class="logo-accent">CAST</span></span>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-btn active" data-feed="all">ALL</button>
+      <button class="nav-btn" data-feed="text">TEXT</button>
+      <button class="nav-btn" data-feed="photo">PHOTO</button>
+      <button class="nav-btn" data-feed="video">VIDEO</button>
+    </nav>
+    <div class="header-right">
+      <button class="header-icon-btn" id="notifications-btn" title="Notifications">
+        <span class="notification-icon">🔔</span>
+        <span class="notification-badge hidden" id="notification-badge">0</span>
+      </button>
+      <button class="user-pill" id="edit-username-btn">
+        <span class="user-pill-icon">◈</span>
+        <span id="header-username">---</span>
+        <span class="user-pill-edit">✎</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <main class="main-layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar-left">
+      <button class="sidebar-post-btn" id="open-post-modal">
+        <span class="sidebar-btn-icon">⊕</span>
+        <span>NEW CAST</span>
+      </button>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-menu">
+        <button class="sidebar-item active">
+          <span>⟡</span> Feed
+        </button>
+        <button class="sidebar-item">
+          <span>◎</span> Trending
+        </button>
+        <button class="sidebar-item">
+          <span>◈</span> Signals
+        </button>
+        <button class="sidebar-item">
+          <span>⊛</span> Clusters
+        </button>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="live-stats">
+        <div class="stat-row">
+          <span class="stat-label">VOID TRAVELERS</span>
+          <span class="stat-val" id="stat-travelers">12,847</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">SIGNALS TODAY</span>
+          <span class="stat-val" id="stat-signals">3,291</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">LIVE BROADCASTS</span>
+          <span class="stat-val live-dot">9</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- FEED -->
+    <section class="feed-section">
+      <div class="feed-header">
+        <h1 class="feed-title">LIVE TRANSMISSIONS</h1>
+        <div class="feed-pulse"></div>
+      </div>
+
+      <div id="post-feed" class="post-feed">
+        <!-- Posts injected by JS -->
+      </div>
+
+      <div class="feed-end">
+        <span class="feed-end-text">— you've reached the edge of the known void —</span>
+      </div>
+    </section>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="sidebar-right">
+      <div class="trending-box">
+        <h3 class="sidebar-heading">TRENDING SIGNALS</h3>
+        <div class="trending-list">
+          <div class="trending-item">#cosmicrift <span>2.1K</span></div>
+          <div class="trending-item">#voidcast <span>1.8K</span></div>
+          <div class="trending-item">#darkmatter <span>987</span></div>
+          <div class="trending-item">#noanons <span>654</span></div>
+          <div class="trending-item">#stellarfall <span>431</span></div>
+        </div>
+      </div>
+      <div class="trending-box">
+        <h3 class="sidebar-heading">RECENT TRAVELERS</h3>
+        <div id="recent-users" class="recent-users-list">
+          <!-- injected by JS -->
+        </div>
+      </div>
+      <div class="trending-box rules-box">
+        <h3 class="sidebar-heading">THE VOID CODE</h3>
+        <ul class="rules-list">
+          <li>✦ No registration required</li>
+          <li>✦ All voices anonymous</li>
+          <li>✦ Signals self-destruct at dawn</li>
+          <li>✦ No void traveler shall be silenced</li>
+        </ul>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- MOBILE FAB -->
+  <button class="fab-btn" id="fab-post">⊕</button>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- COMMENTS MODAL -->
+  <div id="comments-modal" class="modal-overlay">
+    <div class="modal-box post-modal-box">
+      <div class="modal-glow"></div>
+      <button class="modal-close" id="close-comments-modal">✕</button>
+      <h2 class="modal-title">SIGNAL RESPONSES</h2>
+      <div id="comments-list" class="comments-list"></div>
+      <div class="post-footer" style="margin-top:20px;">
+        <input type="text" id="comment-input" class="comment-input" placeholder="Add your voice..." maxlength="200" />
+        <button id="submit-comment" class="btn-primary btn-small">REPLY</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS MODAL -->
+  <div id="notifications-modal" class="modal-overlay">
+    <div class="modal-box notifications-modal-box">
+      <div class="modal-glow"></div>
+      <button class="modal-close" id="close-notifications-modal">✕</button>
+      <h2 class="modal-title">ACTIVITY</h2>
+      <div id="notifications-list" class="notifications-list"></div>
+    </div>
+  </div>
+
+  <script src="voidcast.js"></script>
+</body>
+</html>
