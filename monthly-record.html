@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="stylesheet" href="monthly-record.css" />
+    <title>Month's record</title>
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        (function () {
+            emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS User ID
+        })();
+    </script>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="shooting-stars">
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+    </div>
+    <div class="page-container">
+        <h1>Monthly Record</h1>
+        <form id="recordForm">
+            <label>
+                Month:
+                <input type="month" id="month" required>
+            </label>
+        <label>
+            Income Source:
+            <input type="text" id="incomeSource" placeholder="e.g. Salary">
+            Amount:
+            <input type="number" id="incomeAmount" min="0" step="0.01">
+            <button type="button" onclick="addIncome()">Add Income</button>
+        </label>
+        <div id="incomeList"></div>
+        <label>
+            Expense Source:
+            <input type="text" id="expenseSource" placeholder="e.g. Rent">
+            Amount:
+            <input type="number" id="expenseAmount" min="0" step="0.01">
+            Quantity:
+            <input type="number" id="expenseQty" min="1" step="1" value="1">
+            <button type="button" onclick="addExpense()">Add Expense</button>
+        </label>
+        <div id="expenseList"></div>
+        <button type="submit">Save Statement</button>
+    </form>
+
+    <h2>Statement</h2>
+    <div id="statement"></div>
+
+    <div style="margin: 10px 0;">
+        <button type="button" onclick="downloadPDF()">Download Statement as PDF</button>
+        <button type="button" onclick="sendStatementEmail()">Send Statement by Email</button>
+    </div>
+
+    <h2>History</h2>
+    <table id="historyTable">
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Total Income</th>
+                <th>Total Expense</th>
+                <th>Balance</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <button type="button" id="clearHistoryBtn">Clear History</button>
+    </div>
+    <script src="monthly-record.js"></script>
+</body>
+</html>
