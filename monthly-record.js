@@ -74,6 +74,8 @@ let incomes = [];
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             const month = document.getElementById('month').value || 'Statement';
+            const filename = `Statement_${month}.pdf`;
+
             doc.setFontSize(16);
             doc.text(`Monthly Statement: ${month}`, 10, 15);
             doc.setFontSize(12);
@@ -83,7 +85,21 @@ let incomes = [];
                 doc.text(line.trim(), 10, y);
                 y += 10;
             });
-            doc.save(`Statement_${month}.pdf`);
+
+            const pdfBlob = doc.output('blob');
+            if (navigator.msSaveOrOpenBlob) {
+                navigator.msSaveOrOpenBlob(pdfBlob, filename);
+                return;
+            }
+
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(pdfBlob);
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
 
         function sendStatementEmail() {
