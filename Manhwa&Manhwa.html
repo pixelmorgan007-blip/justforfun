@@ -28,7 +28,7 @@
         <input id="searchInput" type="text" placeholder="Search manhwa...">
     </div>
 
-    <div class="anime-list" id="Manhwa&ManhwaList">
+    <div class="anime-list" id="animeList">
 
 
         <div class="card" data-title="Solo Leveling">
@@ -194,20 +194,7 @@
 
     </div>
 </div>
-
-<script>
-  const searchInput = document.getElementById('searchInput');
-  const animeList = document.getElementById('Manhwa&ManhwaList');
-  const cards = Array.from(animeList.querySelectorAll('.card'));
-
-  searchInput.addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase().trim();
-    cards.forEach(card => {
-      const title = card.getAttribute('data-title').toLowerCase();
-      const visible = title.includes(query) || query === '';
-      card.style.display = visible ? 'block' : 'none';
-    });
-  });
-</script>
+</div>
+<script src="manhwa.js"></script>
 </body>
 </html>
